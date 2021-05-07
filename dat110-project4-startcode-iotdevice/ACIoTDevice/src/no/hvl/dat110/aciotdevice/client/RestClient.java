@@ -1,9 +1,9 @@
 package no.hvl.dat110.aciotdevice.client;
 
 import okhttp3.*;
+import com.google.gson.*;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 public class RestClient {
 
@@ -21,11 +21,12 @@ public class RestClient {
 		// TODO: implement a HTTP POST on the service to post the message
 		OkHttpClient client = new OkHttpClient();
 
-		RequestBody body = RequestBody.create(JSON, message);
-		Request request = new Request.Builder().url("http://localhost:8080/accessdevice/log").put(body).build();
+		Gson gson = new Gson();
+		RequestBody body = RequestBody.create(JSON, gson.toJson(message));
+		Request request = new Request.Builder().url("http://localhost:8080/accessdevice/log").post(body).build();
 
 		try (Response response = client.newCall(request).execute()) {
-			System.out.println(response.body().string());
+			//System.out.println(response.body().string());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -47,9 +48,9 @@ public class RestClient {
 			String codeStr = response.body().string();
 			System.out.println("The received code is: " + codeStr);
 			String[] items = codeStr.replaceAll("\\[", "").replaceAll("\\\"","").replaceAll("\\ ", "").replaceAll("\\]", "").split(",");
-			System.out.println(Arrays.toString(items) + "The length is " + items.length + " Element 1: " + items[0] + " Element 2 " + items[1]);
+			//System.out.println(Arrays.toString(items) + "The length is " + items.length + " Element 1: " + items[0] + " Element 2 " + items[1]);
 			int[] result = new int [items.length];
-			for (int i = 0; i < 0; i++){
+			for (int i = 0; i < result.length; i++){
 				try {
 					result[i] = Integer.parseInt(items[i]);
 					code.setAccesscode(result);
